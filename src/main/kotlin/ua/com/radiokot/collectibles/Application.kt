@@ -3,6 +3,7 @@ package ua.com.radiokot.collectibles
 import com.sksamuel.scrimage.nio.ImmutableImageLoader
 import com.sksamuel.scrimage.nio.PngWriter
 import ua.com.radiokot.collectibles.generator.RandomCollectiblesGenerator
+import ua.com.radiokot.collectibles.generator.model.GeneratedCollectible
 import ua.com.radiokot.collectibles.generator.model.GenerationPoolEntry
 import java.io.File
 
@@ -94,14 +95,14 @@ object Application {
 
         repeat(100) {
             val collectible = RandomCollectiblesGenerator(groups).generate()
+
             val collectibleImage = ImageAssembler().assemble(
                 collectible.parts
-                    .map { it.part }
-                    .filterIsInstance(GenerationPoolEntry.Image::class.java)
-                    .map { it.content }
+                    .map(GeneratedCollectible.Part::content)
             )
 
             collectibleImage.output(PngWriter.NoCompression, File("D:\\Downloads\\Parts\\result.png"))
+
             Thread.sleep(1500)
         }
     }

@@ -42,7 +42,7 @@ sealed class GenerationPoolEntry(
          *
          * For example, some hats are incompatible with some ears.
          */
-        val incompatibleWith: Collection<String>,
+        val incompatibleWith: Collection<String> = emptyList(),
         groupName: String,
         weight: Int,
     ) : GenerationPoolEntry(groupName, weight)

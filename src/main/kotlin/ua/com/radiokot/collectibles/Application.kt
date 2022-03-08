@@ -63,7 +63,7 @@ object Application {
                 .map { file ->
                     GenerationPoolEntry.Image(
                         name = file.name,
-                        groupName = "Mouse",
+                        groupName = "Mouth",
                         weight = 1,
                         isRare = false,
                         content = loader.fromFile(file)

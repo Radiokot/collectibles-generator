@@ -14,7 +14,7 @@ object Application {
         val loader = ImmutableImageLoader.create()
 
         val groups = listOf(
-            (File("D:\\Downloads\\Parts\\1-BG")
+            (File("/Users/olegkoretsky/Downloads/Parts/1-BG")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -25,7 +25,36 @@ object Application {
                         content = loader.fromFile(file)
                     )
                 },
-            (File("D:\\Downloads\\Parts\\3-Body")
+
+            listOf(
+                GenerationPoolEntry.Image(
+                    name = "Devil wings",
+                    groupName = "Body parts",
+                    weight = 3,
+                    isRare = true,
+                    content = loader.fromFile(File("/Users/olegkoretsky/Downloads/Parts/2-Body Parts/Bodyparts_4.png")),
+                ),
+                GenerationPoolEntry.Image(
+                    name = "Pokemon tail",
+                    groupName = "Body parts",
+                    weight = 3,
+                    isRare = true,
+                    content = loader.fromFile(File("/Users/olegkoretsky/Downloads/Parts/2-Body Parts/Bodyparts_6.png")),
+                ),
+                GenerationPoolEntry.Image(
+                    name = "Rick Sanchez haircut",
+                    groupName = "Body parts",
+                    weight = 3,
+                    isRare = true,
+                    content = loader.fromFile(File("/Users/olegkoretsky/Downloads/Parts/2-Body Parts/Bodyparts_8.png")),
+                ),
+                GenerationPoolEntry.Missing(
+                    groupName = "Body parts",
+                    weight = 90
+                )
+            ),
+
+            (File("/Users/olegkoretsky/Downloads/Parts/3-Body")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -36,7 +65,7 @@ object Application {
                         content = loader.fromFile(file)
                     )
                 },
-            (File("D:\\Downloads\\Parts\\4-Head")
+            (File("/Users/olegkoretsky/Downloads/Parts/4-Head")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -47,7 +76,7 @@ object Application {
                         content = loader.fromFile(file)
                     )
                 },
-            (File("D:\\Downloads\\Parts\\5-Ears")
+            (File("/Users/olegkoretsky/Downloads/Parts/5-Ears")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -58,7 +87,7 @@ object Application {
                         content = loader.fromFile(file)
                     )
                 },
-            (File("D:\\Downloads\\Parts\\6-Mouse")
+            (File("/Users/olegkoretsky/Downloads/Parts/6-Mouse")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -69,7 +98,7 @@ object Application {
                         content = loader.fromFile(file)
                     )
                 },
-            (File("D:\\Downloads\\Parts\\7-Nose")
+            (File("/Users/olegkoretsky/Downloads/Parts/7-Nose")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -80,7 +109,7 @@ object Application {
                         content = loader.fromFile(file)
                     )
                 },
-            (File("D:\\Downloads\\Parts\\8-Eyes")
+            (File("/Users/olegkoretsky/Downloads/Parts/8-Eyes")
                 .listFiles { _, fileName -> fileName.endsWith(".png") } ?: emptyArray())
                 .map { file ->
                     GenerationPoolEntry.Image(
@@ -93,7 +122,7 @@ object Application {
                 },
         )
 
-        repeat(100) {
+        repeat(100) { i ->
             val collectible = RandomCollectiblesGenerator(groups).generate()
 
             val collectibleImage = ImageAssembler().assemble(
@@ -101,9 +130,16 @@ object Application {
                     .map(GeneratedCollectible.Part::content)
             )
 
-            collectibleImage.output(PngWriter.NoCompression, File("D:\\Downloads\\Parts\\result.png"))
+            val fileName =
+                if (collectible.isRare)
+                    "r$i.png"
+                else
+                    "$i.png"
 
-            Thread.sleep(1500)
+            collectibleImage.output(
+                PngWriter.MinCompression,
+                File("/Users/olegkoretsky/Downloads/Parts/_Generated/$fileName")
+            )
         }
     }
 }

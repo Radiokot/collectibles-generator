@@ -13,12 +13,24 @@ class RandomCollectiblesGenerator(
 ) : CollectiblesGenerator {
 
     override fun generate(): GeneratedCollectible {
+        val incompatibleParts = mutableSetOf<String>()
+
         return GeneratedCollectible(
             parts = orderedPool
                 .mapNotNull { poolEntries ->
-                    val choice = poolEntries.weightedRandom()
+                    val filteredPoolEntries =  poolEntries
+                        .filterNot { it is GenerationPoolEntry.Image && incompatibleParts.contains(it.name) }
+
+                    if (filteredPoolEntries.isEmpty()) {
+                        return@mapNotNull null
+                    }
+
+                    val choice = filteredPoolEntries.weightedRandom()
+                    val originalProbability = poolEntries.probabilityOf(choice)
+
                     if (choice is GenerationPoolEntry.Image) {
-                        choice to poolEntries.probabilityOf(choice)
+                        incompatibleParts.addAll(choice.incompatibleWith)
+                        choice to originalProbability
                     } else {
                         null
                     }
